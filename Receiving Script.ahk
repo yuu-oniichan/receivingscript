@@ -165,9 +165,9 @@ CellTransfer(loopCount) {
 
     loop, %loopCount% {
         Send {Ctrl Down}c{Ctrl Up}
-        Sleep, 30
+        Sleep, 40
         Send {Down}
-        Sleep, 30
+        Sleep, 20
 
         Send {Alt Down}{Tab}{Alt Up}
         Sleep, 80
@@ -175,9 +175,9 @@ CellTransfer(loopCount) {
         Send {Ctrl Down}v{Ctrl Up}
         Sleep, 30
         Send {Backspace}
-        Sleep, 30
+        Sleep, 20
         Send {Down}
-        Sleep, 30
+        Sleep, 20
 
         Send {Alt Down}{Tab}{Alt Up}
         Sleep, 80
