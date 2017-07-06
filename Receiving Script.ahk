@@ -159,8 +159,41 @@ Startup() {
     Send %POvalue%{Tab}
 }
 
+; Transfers from list of cells in Excel to ACCTIVATE
+CellTransfer(loopCount) {
+    ;WinGetTitle, currentExcel
+
+    loop, %loopCount% {
+        Send {Ctrl Down}c{Ctrl Up}
+        Sleep, 30
+        Send {Down}
+        Sleep, 30
+
+        Send {Alt Down}{Tab}{Alt Up}
+        Sleep, 80
+
+        Send {Ctrl Down}v{Ctrl Up}
+        Sleep, 30
+        Send {Backspace}
+        Sleep, 30
+        Send {Down}
+        Sleep, 30
+
+        Send {Alt Down}{Tab}{Alt Up}
+        Sleep, 80
+    }
+    
+    return
+}
+
+
     ^!c::
-    Startup()
+    QtyPrompt := "Enter number of items"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    if ErrorLevel
+        return
+
+    CellTransfer(Qual)
     return
 
 
