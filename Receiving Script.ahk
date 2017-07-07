@@ -125,16 +125,54 @@ MoveBack() {
     Send ^s
     return
 
-ParseClipboard() {
-    Send ^c
+ParseXlCol(Xl, col, entryNum, arr) {
+    /*Send {Ctrl Down}c{Ctrl Up}
+    Sleep, 20
+    StringReplace, clipboard, clipboard, `r`n, ,All
     value = %clipboard%
-    StringReplace, value, value, `r`n, ,A
-    Send {Esc}
     return value
+    */
+    ;return Xl.Range("A1").Value
+    while (Xl.Range("A" . A_Index).Value != "") {
+        Xl.Range("A" . A_Index).Value := value
+    }
+
 }
 
 ;incomplete for shipping notes entry
-Startup() {
+/*
+AutoShip() {
+    WinGetTitle, currentExcel
+    Xl := ComObjActive("Excel.Application") ;creates a handle to your currently active excel sheet
+
+    QtyPrompt := "Enter number of Orders to process"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    /*if ErrorLevel > 0
+        Msgbox Input Error
+        return
+        */
+
+    /*
+    POArray := Object()
+    POQty := Object()
+    Loop, %Qual% {
+        POArray.Insert(ParseClipboard())
+        Send {Right}
+        Sleep, 20
+        POQty.Insert(ParseClipboard())
+        Send {Left}{Down}
+        Sleep, 20
+    }
+
+    WinActivate, Untitled - Notepad
+
+    for index, element in POArray {
+        Send "Element number " . %index% . " is " . %element%
+        Send " " POQty[index]
+        Send {`n}
+    }
+
+    /*
     WinActivate, Trio SCS - Acctivate
     WinWaitActive, Trio SCS - Acctivate
 
@@ -158,10 +196,10 @@ Startup() {
     Send +{End}
     Send %POvalue%{Tab}
 }
+    */
 
 ; Transfers from list of cells in Excel to ACCTIVATE
 CellTransfer(loopCount) {
-    ;WinGetTitle, currentExcel
 
     loop, %loopCount% {
         Send {Ctrl Down}c{Ctrl Up}
@@ -196,6 +234,11 @@ CellTransfer(loopCount) {
     CellTransfer(Qual)
     return
 
+    ^!d::
+    Xl := ComObjActive("Excel.Application")
+    tester := ParseClipboard(Xl, "A",)
+    MsgBox %tester%    
+    return
 
 /*
     ImageSearch, FoX, FoY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\sales_order_button.png
