@@ -8,13 +8,23 @@ CoordMode Screen
 OrderBoxX = 130
 OrderBoxY = 191
 
+Global setCompFlag = 0
+Global customMonth = 0
+Global customDay = 0
 
+;Function: saves the current mouse position; not used
 SaveMousePos() {
     WinActivate, Trio SCS - Acctivate
     MouseGetPos, OrderBoxX, OrderBoxY
 }
 
+;Function: moves the mouse back to position; not used
+MoveBack() {
+    MouseMove, OrderBoxX, OrderBoxY
+}
 
+
+;Function: Creates a new note in acctivate via imagesearch
 NewNote()
 {
     WinActivate, Trio SCS - Acctivate
@@ -41,162 +51,34 @@ NewNote()
 
 }
 
-
-MoveBack() {
-    MouseMove, OrderBoxX, OrderBoxY
-}
-
-
-    ;creates a new note in acctivate
-    ^!a::
-    NewNote()
-    return
-
-    ;Creates a PO receiving note to both buyer and prompts for note to Anne
-    ^!w::
-    qtyPrompt := "Enter a whole number. Do not use this to enter exceptions."
-    InputBox, qty, Enter QTY received and accepted, %qtyPrompt%
-    if ErrorLevel
-        return
-
-    BuyerPrompt := "Aniket = a, Dwi = d, Sam = s"
-    InputBox, buyer, Enter Buyer, %BuyerPrompt%
-    if ErrorLevel
-        return
-
-    InputBox, noteAnne, Complete PO?, y or n
-    if ErrorLevel
-        return
-
-    NewNote()
-    Send %qty% Received, %qty% Accepted.
-    Send {Tab}{Tab}{Tab}%buyer%{Tab}
-    FormatTime, month,, MM
-    FormatTime, day,, dd
-    Send %month%{right}%day%{right}
-    Send ^s
-    ifNotEqual noteAnne, y
-        return
-
-    ;Only sets note to Anne
-    ^!q::
-    NewNote()
-    Send All Parts Recieved, PO Ready For Completion.
-    Send {Tab}{Tab}{Tab}a{Down}{Tab}
-    FormatTime, month,, MM
-    FormatTime, day,, dd
-    Send %month%{right}%day%{right}
-    Send ^s
-    return    
-
-
-;Creates a producted arrived note, prompts for buyer
-    ^!e::
-
-    BuyerPrompt := "Aniket = a, Dwi = d, Sam = s"
-    InputBox, buyer, Enter Buyer, %BuyerPrompt%
-    if ErrorLevel
-        return
-
-    NewNote()
-    Send Product Arrived, Not Yet Received.
-    Send {Tab}{Tab}{Tab}%buyer%{Tab}
-    FormatTime, month,, MM
-    FormatTime, day,, dd
-    Send %month%{right}%day%{right}
-    Send ^s
-    return
-
-
-;Creates a ship note, prompts for # shipped
-    ^!s::
-
-    QtyPrompt := "Enter number of items shipped"
-    InputBox, Qual, Enter Qual, %QtyPrompt%
-    if ErrorLevel
-        return
-
+;Sends Pick and Pull Note to Anne
+PickAndPull(Qual, POType) {
     NewNote()
     Send Picked and Pulled, Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
-    Send {Tab}{Tab}{Tab}a{Down}{Tab}
-    FormatTime, month,, MM
-    FormatTime, day,, dd
-    Send %month%{right}%day%{right}
-    Send ^s
-    return
-
-ParseXlCol(Xl, col, entryNum, arr) {
-    /*Send {Ctrl Down}c{Ctrl Up}
-    Sleep, 20
-    StringReplace, clipboard, clipboard, `r`n, ,All
-    value = %clipboard%
-    return value
-    */
-    ;return Xl.Range("A1").Value
-    while (Xl.Range("A" . A_Index).Value != "") {
-        Xl.Range("A" . A_Index).Value := value
-    }
-
-}
-
-;incomplete for shipping notes entry
-/*
-AutoShip() {
-    WinGetTitle, currentExcel
-    Xl := ComObjActive("Excel.Application") ;creates a handle to your currently active excel sheet
-
-    QtyPrompt := "Enter number of Orders to process"
-    InputBox, Qual, Enter Qual, %QtyPrompt%
-    /*if ErrorLevel > 0
-        Msgbox Input Error
+    if (POType = "S")
+        Send {Tab}{Tab}{Tab}a{Down}{Tab}
+    else if (POType = "R")
+        Send {Tab}{Tab}{Tab}j{Tab}
+    else {
+        MsgBox PickandPull Incorrect Input Error
         return
-        */
-
-    /*
-    POArray := Object()
-    POQty := Object()
-    Loop, %Qual% {
-        POArray.Insert(ParseClipboard())
-        Send {Right}
-        Sleep, 20
-        POQty.Insert(ParseClipboard())
-        Send {Left}{Down}
-        Sleep, 20
     }
-
-    WinActivate, Untitled - Notepad
-
-    for index, element in POArray {
-        Send "Element number " . %index% . " is " . %element%
-        Send " " POQty[index]
-        Send {`n}
-    }
-
-    /*
-    WinActivate, Trio SCS - Acctivate
-    WinWaitActive, Trio SCS - Acctivate
-
-    MouseGetPos, OBoxX, OBoxY
-
-    WinActivate, Invoice Notes - Excel
-    WinWaitActive, Invoice Notes - Excel
-
-    Send {Right}
-    cellValue := ParseClipboard()
-    Send {Left}
-
-    POvalue := ParseClipboard()
-    Send {Down}
-
-    WinActivate, Trio SCS - Acctivate
-    WinWaitActive, Trio SCS - Acctivate
-
-    Click OBoxX, OBoxY
-    Send {Home}
-    Send +{End}
-    Send %POvalue%{Tab}
+    SetTimeCompSave()
+    return
 }
-    */
+
+SetTimeCompSave() {
+    if (customMonth != 0) {
+        Send %customMonth%{right}%customDay%{right}
+    } else {
+        FormatTime, month,, MM
+        FormatTime, day,, dd
+        Send %month%{right}%day%{right}
+    }
+    if setCompFlag 
+        Send {Tab}{Tab}{Space}
+    Send ^s
+}
 
 ; Transfers from list of cells in Excel to ACCTIVATE
 CellTransfer(loopCount) {
@@ -224,7 +106,75 @@ CellTransfer(loopCount) {
     return
 }
 
+;creates a new note in acctivate
+    ^!a::
+    NewNote()
+    return
 
+;Creates a PO receiving note to both buyer and prompts for note to Anne
+;Do not break order, no return statement to flow into ^!q command
+    ^!w::
+    qtyPrompt := "Enter a whole number. Do not use this to enter exceptions."
+    InputBox, qty, Enter QTY received and accepted, %qtyPrompt%
+    if ErrorLevel
+        return
+
+    BuyerPrompt := "Aniket = a, Dwi = d, Sam = s"
+    InputBox, buyer, Enter Buyer, %BuyerPrompt%
+    if ErrorLevel
+        return
+
+    InputBox, noteAnne, Complete PO?, y or n
+    if ErrorLevel
+        return
+
+    NewNote()
+    Send %qty% Received, %qty% Accepted.
+    Send {Tab}{Tab}{Tab}%buyer%{Tab}
+    SetTimeCompSave()
+    ifNotEqual noteAnne, y
+        return
+
+;Only sets PO note to Anne
+    ^!q::
+    NewNote()
+    Send All Parts Recieved, PO Ready For Completion.
+    Send {Tab}{Tab}{Tab}a{Down}{Tab}
+    SetTimeCompSave()
+    return    
+
+
+;Creates a producted arrived note, prompts for buyer
+    ^!e::
+
+    BuyerPrompt := "Aniket = a, Dwi = d, Sam = s"
+    InputBox, buyer, Enter Buyer, %BuyerPrompt%
+    if ErrorLevel
+        return
+
+    NewNote()
+    Send Product Arrived, Not Yet Received.
+    Send {Tab}{Tab}{Tab}%buyer%{Tab}
+    SetTimeCompSave()
+    return
+
+;Creates a ship note, prompts for # shipped
+    ^!s::
+
+    QtyPrompt := "Enter number of items shipped"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    if ErrorLevel
+        return
+
+    TypePrompt := "Sales order = S, TRO = R"
+    InputBox, oType, Enter oType, %TypePrompt%
+    if ErrorLevel
+        return
+
+    PickAndPull(Qual, oType)
+    return
+
+;Copy-Paste Shortcut, brute force
     ^!c::
     QtyPrompt := "Enter number of items"
     InputBox, Qual, Enter Qual, %QtyPrompt%
@@ -234,10 +184,91 @@ CellTransfer(loopCount) {
     CellTransfer(Qual)
     return
 
-    ^!d::
+
+
+;Work-in-Progress Starts Here
+
+;takes in a com excel and a column (eg. "A")
+;returns an array with the non-empty values of the column
+ParseXlCol(Xl, col) {
+    /*Send {Ctrl Down}c{Ctrl Up}
+    Sleep, 20
+    StringReplace, clipboard, clipboard, `r`n, ,All
+    value = %clipboard%
+    return value
+    */
+    ;return Xl.Range("A1").Value
+    arr := object()
+
+    while (Xl.Range(col . A_Index).Value != "") {
+        ;MsgBox, % col . A_Index
+        arr[A_Index] := Xl.Range(col . A_Index).Value
+        ;MsgBox, % arr[A_Index]
+    }
+    return arr
+}
+
+;incomplete for shipping notes entry
+
+AutoShip() {
+    WinGetTitle, currentExcel
+    Xl := ComObjActive("Excel.Application") ;creates a handle to your currently active excel sheet
+
+    /*
+    QtyPrompt := "Enter number of Orders to process"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    if ErrorLevel
+        return
+    */
+
+    WinActivate, Trio SCS - Acctivate
+
+    MouseGetPos, OBoxX, OBoxY
+
     Xl := ComObjActive("Excel.Application")
-    tester := ParseClipboard(Xl, "A",)
-    MsgBox %tester%    
+    arrPO := ParseXlCol(Xl, "A")
+    arrVar := ParseXlCol(Xl, "B")
+
+    WinActivate, Trio SCS - Acctivate
+
+    Loop, % arrPO.MaxIndex() {
+        Click OBoxX, OBoxY
+        Send {Home}
+        Send +{End}
+        Send, % arrPO[A_Index]
+        Send {Tab}
+        Sleep, 1500
+
+        Ptype := SubStr(arrPO[A_Index],2,1)
+
+        PickAndPull(floor(arrVar[A_Index]), Ptype)
+        Sleep, 50
+    }
+}
+
+    ^!d::
+    AutoShip()
+    return
+
+    ^!1::
+    if setCompFlag
+        setCompFlag = 0
+    else setCompFlag = 1
+    MsgBox Completion Flag set at %setCompFlag%
+    return
+
+    ^!2::
+    MonthPrompt := "Enter the month for entry (01-12), 0 for today"
+    InputBox, customMonth, Enter customMonth, %MonthPrompt%
+    if ErrorLevel
+        return
+
+    DayPrompt := "Enter the day for entry (01-31), 0 for today"
+    InputBox, customDay, Enter customDay, %DayPrompt%
+    if ErrorLevel
+        return
+
+    MsgBox Entry Date Set at %customMonth% / %customDay%
     return
 
 /*
