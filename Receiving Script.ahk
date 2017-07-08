@@ -271,6 +271,38 @@ AutoShip() {
     MsgBox Entry Date Set at %customMonth% / %customDay%
     return
 
+;Creates a Tracking Note
+TrackingNote() {
+    QtyPrompt := "Enter number of items"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    if ErrorLevel
+        return
+
+    TypePrompt := "Sales order = S, TRO = R"
+    InputBox, oType, Enter oType, %TypePrompt%
+    if ErrorLevel
+        return
+
+    Send {Alt Down}d{Alt up}{Right}
+    NewNote()
+    Send %Qual% Pcs Shipped VIA UPS Freight `n
+    Send OCY 830588371
+    if (oType = "S")
+        Send {Tab}{Tab}{Tab}a{Down}{Tab}
+    else if (oType = "R")
+        Send {Tab}{Tab}{Tab}j{Tab}
+    else {
+        MsgBox Tracking Incorrect Input Error
+        return
+    }
+    SetTimeCompSave()
+    return
+}
+
+    ^!t::
+    TrackingNote()
+    return
+
 /*
     ImageSearch, FoX, FoY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\sales_order_button.png
     if(ErrorLevel=0)
