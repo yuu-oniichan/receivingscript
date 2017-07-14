@@ -85,19 +85,19 @@ CellTransfer(loopCount) {
 
     loop, %loopCount% {
         Send {Ctrl Down}c{Ctrl Up}
-        Sleep, 40
+        Sleep, 50
         Send {Down}
-        Sleep, 20
+        Sleep, 40
 
         Send {Alt Down}{Tab}{Alt Up}
         Sleep, 80
 
         Send {Ctrl Down}v{Ctrl Up}
-        Sleep, 30
+        Sleep, 50
         Send {Backspace}
-        Sleep, 20
+        Sleep, 40
         Send {Down}
-        Sleep, 20
+        Sleep, 40
 
         Send {Alt Down}{Tab}{Alt Up}
         Sleep, 80
@@ -134,6 +134,7 @@ CellTransfer(loopCount) {
     SetTimeCompSave()
     ifNotEqual noteAnne, y
         return
+    sleep, 300
 
 ;Only sets PO note to Anne
     ^!q::
