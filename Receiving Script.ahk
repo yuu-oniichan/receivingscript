@@ -304,6 +304,40 @@ TrackingNote() {
     TrackingNote()
     return
 
+SerialEnter() {
+    QtyPrompt := "Enter number of serials"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    if ErrorLevel
+        return
+
+    Loop, %Qual% {
+        Click
+        Sleep, 50
+        Send {Enter}
+        Sleep, 30
+    }
+}
+
+    ^!k::
+    SerialEnter()
+    return
+
+RMANote() {
+    QtyPrompt := "Enter number of parts rejected"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    if ErrorLevel
+        return
+
+    NewNote()
+    Send %Qual% Pcs Rejected, Please RMA with Vendor
+    Send {Tab}{Tab}{Tab}j{Tab}
+    SetTimeCompSave()
+}
+
+    ^!f::
+    RMANote()
+    return
+
 /*
     ImageSearch, FoX, FoY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\sales_order_button.png
     if(ErrorLevel=0)
