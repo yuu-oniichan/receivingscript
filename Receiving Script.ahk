@@ -14,6 +14,8 @@ Global customDay = 0
 
 Global Receiver = "tsli"
 Global PartNo = "00Z000"
+Global ShipCompany = "UPS Freight"
+Global Tracking = "000000"
 
 ;Function: saves the current mouse position; not used
 SaveMousePos() {
@@ -384,10 +386,27 @@ TrackingNote() {
     if ErrorLevel
         return
 
+    ShipInfoPrompt := "Change Shipping Info? Enter y if yes."
+    InputBox, shipPrompt, Enter ShipPrompt, %ShipInfoPrompt%
+    if ErrorLevel
+        return
+
+    if (shipPrompt = "y") {
+        CompanyPrompt := "Enter Shipping Method:"
+        InputBox, ShipCompany, Enter ShipCompany, %CompanyPrompt%, , , , , , , ,%ShipCompany%
+        if ErrorLevel
+            return
+
+        TrackingPrompt := "Enter Tracking Number:"
+            InputBox, Tracking, Enter Tracking, %TrackingPrompt%, , , , , , , ,%Tracking%
+            if ErrorLevel
+        return
+    }
+
     Send {Alt Down}d{Alt up}{Right}
     NewNote()
-    Send %Qual% Pcs Shipped VIA UPS Freight `n
-    Send OCY 830588371
+    Send %Qual% Pcs Shipped VIA %ShipCompany% `n
+    Send %Tracking%
     if (oType = "S")
         Send {Tab}{Tab}{Tab}a{Down}{Tab}
     else if (oType = "R")
