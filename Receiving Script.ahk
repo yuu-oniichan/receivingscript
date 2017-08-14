@@ -12,6 +12,9 @@ Global setCompFlag = 0
 Global customMonth = 0
 Global customDay = 0
 
+Global Receiver = "tsli"
+Global PartNo = "00Z000"
+
 ;Function: saves the current mouse position; not used
 SaveMousePos() {
     WinActivate, Trio SCS - Acctivate
@@ -50,6 +53,103 @@ NewNote()
     MouseMove, OrderBoxX, OrderBoxY
 
 }
+
+ExportDoc() {
+    WinActivate, Trio SCS - Acctivate
+    WinWaitActive, Trio SCS - Acctivate
+
+    MouseGetPos, OrderBoxX, OrderBoxY
+
+    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\exportbutton2.bmp
+    if (ErrorLevel=0)
+    {
+        ;MsgBox Image Found
+        ;Sleep, 500
+        Click %FoundX%, %FoundY%
+    } else if (ErrorLevel=1) {
+        MsgBox Image Not Found
+        return
+    } else {
+        MsgBox Unknown Error
+        Sleep, 500
+        return
+    }
+
+    MouseMove, OrderBoxX, OrderBoxY
+}
+
+PrintDoc() {
+    WinActivate, Trio SCS - Acctivate
+    WinWaitActive, Trio SCS - Acctivate
+
+    MouseGetPos, OrderBoxX, OrderBoxY
+
+    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\printbutton.bmp
+    if (ErrorLevel=0)
+    {
+        ;MsgBox Image Found
+        ;Sleep, 500
+        Click %FoundX%, %FoundY%
+    } else if (ErrorLevel=1) {
+        MsgBox Image Not Found
+        return
+    } else {
+        MsgBox Unknown Error
+        Sleep, 500
+        return
+    }
+
+    MouseMove, OrderBoxX, OrderBoxY
+}
+
+CloseReportWin() {
+    WinActivate, Trio SCS - Acctivate
+    WinWaitActive, Trio SCS - Acctivate
+
+    MouseGetPos, OrderBoxX, OrderBoxY
+
+    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\closereportwin.bmp
+    if (ErrorLevel=0)
+    {
+        FoundX+=100
+        ;MsgBox Image Found
+        ;Sleep, 500
+        Click %FoundX%, %FoundY%
+    } else if (ErrorLevel=1) {
+        MsgBox Image Not Found
+        return
+    } else {
+        MsgBox Unknown Error
+        Sleep, 500
+        return
+    }
+
+    MouseMove, OrderBoxX, OrderBoxY
+    ;MouseMove, %FoundX%, %FoundY%
+    ;MsgBox Ran
+}
+
+UploadButton() {
+    MouseGetPos, OrderBoxX, OrderBoxY
+
+    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\smartvault.bmp
+    if (ErrorLevel=0)
+    {
+        ;MsgBox Image Found
+        ;Sleep, 500
+        Click %FoundX%, %FoundY%
+    } else if (ErrorLevel=1) {
+        MsgBox Image Not Found
+        return
+    } else {
+        MsgBox Unknown Error
+        Sleep, 500
+        return
+    }
+
+    MouseMove, OrderBoxX, OrderBoxY
+}
+
 
 ;Sends Pick and Pull Note to Anne
 PickAndPull(Qual, POType) {
@@ -336,6 +436,102 @@ RMANote() {
 
     ^!f::
     RMANote()
+    return
+
+PrepOutbound() {
+    POPrompt := "Enter the PO to work on:"
+    InputBox, POnum, Enter POnum, %POPrompt%
+    if ErrorLevel
+        return
+
+    QtyPrompt := "Enter number of items to pick:"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    if ErrorLevel
+        return
+
+    SamePrompt := "Enter n if the different Part and Receiver:"
+    InputBox, Same, Enter Same, %SamePrompt%
+    if ErrorLevel
+        return
+
+    if (Same = "n") {
+        PartPrompt := "Enter the part to be received. Enter 'Multi' if multiple parts:"
+        InputBox, PartNo, Enter PartNo, %PartPrompt%
+        if ErrorLevel
+            return
+
+        ReceivePrompt := "Enter the receiving party:"
+        InputBox, Receiver, Enter Receiver, %ReceivePrompt%
+        if ErrorLevel
+            return
+    }
+    
+    Send {Ctrl Down}{Shift Down}d{Shift Up}{Ctrl Up}
+    Sleep, 1800
+    PrintDoc()
+    Sleep, 300
+    Send {Enter}
+    Sleep, 500
+    ExportDoc()
+    Sleep, 50
+    Send {Enter}
+    Sleep, 50
+    Send {Enter}
+    Sleep, 150
+    Send %POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%
+    Sleep, 120
+    Send {Alt Down}d{Alt Up}
+    Sleep, 50
+    Send P:\Warehouse\Jason backup\Migration\Inventory Upload
+    Sleep, 50
+    Send {Enter}
+    Sleep, 80
+    Send {Alt Down}s{Alt Up}
+    Sleep, 200
+    CloseReportWin()
+    Sleep, 500
+
+    Send {Ctrl Down}{Shift Down}t{Shift Up}{Ctrl Up}
+    Sleep, 1500
+    ExportDoc()
+    Sleep, 50
+    Send {Enter}
+    Sleep, 50
+    Send {Enter}
+    Sleep, 150
+    Send %POnum%-serials-%Receiver%-%Qual%pcs-%PartNo%
+    Sleep, 120
+    Send {Alt Down}d{Alt Up}
+    Sleep, 50
+    Send P:\Warehouse\Jason backup\Migration\Inventory Upload
+    Sleep, 50
+    Send {Enter}
+    Sleep, 80
+    Send {Alt Down}s{Alt Up}
+    Sleep, 200
+    CloseReportWin()
+
+    Send {Ctrl Down}{Shift Down}f{Shift Up}{Ctrl Up}
+    Sleep, 5000
+    UploadButton()
+    Sleep, 2000
+    Send {Alt Down}d{Alt Up}
+    Sleep, 50
+    Send P:\Warehouse\Jason backup\Migration\Inventory Upload
+    Sleep, 50
+    Send {Enter}
+    Sleep, 50
+    Send {Alt Down}n{Alt Up}
+    Sleep, 100
+    Send "%POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%" "%POnum%-serials-%Receiver%-%Qual%pcs-%PartNo%"
+    Sleep, 50
+    Send {Alt Down}o{Alt Up}
+    Sleep, 300
+    Send {Enter}
+}
+
+    ^!g::
+    PrepOutbound()
     return
 
 /*
