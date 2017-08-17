@@ -563,6 +563,28 @@ PrepOutbound() {
     PrepOutbound()
     return
 
+    ^!h::
+    MsgBox,
+    (
+        Available Commands (all are togged by Ctrl+Alt+<key>):
+        a: new note
+        w: PO parts received note to buyer and Anne (opt.)
+        q: All parts received to Anne
+        e: Product Arrived note to buyer
+        s: Shipped and invoice note to Anne/Julio
+        c: Copy-Paste from Excel
+        d: auto-ship notes from excel (see doc.)
+        t: tracking note
+        k: serial entry toggle
+        f: RMA note to Julio
+        g: Prep outbound 
+        h: help
+
+        1: set completion flag
+        2: set date of entry
+        3: toggle printing
+    ), ,Receiving Help
+    return    
 /*
     ImageSearch, FoX, FoY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\sales_order_button.png
     if(ErrorLevel=0)
