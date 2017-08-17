@@ -13,6 +13,8 @@ Global customMonth = 0
 Global customDay = 0
 Global printFlag = 1
 
+Global Quantity = 0
+Global PONum = "TSO017"
 Global Receiver = "tsli"
 Global PartNo = "00Z000"
 Global ShipCompany = "UPS Freight"
@@ -492,6 +494,10 @@ PrepOutbound() {
         if ErrorLevel
             return
     }
+
+    Quantity = Qual
+
+    WinWaitActive, Trio SCS - Acctivate
     
     Send {Ctrl Down}{Shift Down}d{Shift Up}{Ctrl Up}
     Sleep, 1800
@@ -502,11 +508,11 @@ PrepOutbound() {
     Send {Enter}
     Sleep, 500
     ExportDoc()
-    Sleep, 50
-    Send {Enter}
-    Sleep, 50
-    Send {Enter}
     Sleep, 150
+    Send {Enter}
+    Sleep, 50
+    Send {Enter}
+    Sleep, 300
     Send %POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%
     Sleep, 120
     Send {Alt Down}d{Alt Up}
@@ -514,20 +520,20 @@ PrepOutbound() {
     Send P:\Warehouse\Jason backup\Migration\Inventory Upload
     Sleep, 50
     Send {Enter}
-    Sleep, 80
+    Sleep, 150
     Send {Alt Down}s{Alt Up}
     Sleep, 200
     CloseReportWin()
-    Sleep, 500
+    Sleep, 800
 
     Send {Ctrl Down}{Shift Down}t{Shift Up}{Ctrl Up}
-    Sleep, 1500
+    Sleep, 2000
     ExportDoc()
-    Sleep, 50
-    Send {Enter}
-    Sleep, 50
-    Send {Enter}
     Sleep, 150
+    Send {Enter}
+    Sleep, 50
+    Send {Enter}
+    Sleep, 300
     Send %POnum%-serials-%Receiver%-%Qual%pcs-%PartNo%
     Sleep, 120
     Send {Alt Down}d{Alt Up}
@@ -535,13 +541,13 @@ PrepOutbound() {
     Send P:\Warehouse\Jason backup\Migration\Inventory Upload
     Sleep, 50
     Send {Enter}
-    Sleep, 80
+    Sleep, 150
     Send {Alt Down}s{Alt Up}
     Sleep, 200
     CloseReportWin()
 
     Send {Ctrl Down}{Shift Down}f{Shift Up}{Ctrl Up}
-    Sleep, 5000
+    Sleep, 4000
     UploadButton()
     Sleep, 2000
     Send {Alt Down}d{Alt Up}
@@ -551,16 +557,31 @@ PrepOutbound() {
     Send {Enter}
     Sleep, 50
     Send {Alt Down}n{Alt Up}
-    Sleep, 100
+    Sleep, 300
     Send "%POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%" "%POnum%-serials-%Receiver%-%Qual%pcs-%PartNo%"
-    Sleep, 50
+    Sleep, 150
     Send {Alt Down}o{Alt Up}
     Sleep, 300
     Send {Enter}
 }
 
+ObaDump() {
+    WinActivate, rawdump - Excel
+    Send %POnum%{Right}
+    Sleep, 30
+    Send %Quantity%{Right}
+    Sleep, 30
+    Send %PartNo%
+    Sleep, 30
+    Send {Down}{Home}
+}
+
     ^!g::
+    IfWinNotExist, rawdump - Excel
+        RunWait, excel.exe "P:\Warehouse\Jason backup\Migration\rawdump.xlsx"
+        WinActivate, Trio SCS - Acctivate
     PrepOutbound()
+    ObaDump()
     return
 
     ^!h::
