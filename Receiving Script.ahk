@@ -11,6 +11,7 @@ OrderBoxY = 191
 Global setCompFlag = 0
 Global customMonth = 0
 Global customDay = 0
+Global printFlag = 1
 
 Global Receiver = "tsli"
 Global PartNo = "00Z000"
@@ -374,6 +375,13 @@ AutoShip() {
     MsgBox Entry Date Set at %customMonth% / %customDay%
     return
 
+    ^!3::
+    if printFlag
+        printFlag = 0
+    else printFlag = 1
+    MsgBox Print Flag set at %printFlag%
+    return
+
 ;Creates a Tracking Note
 TrackingNote() {
     QtyPrompt := "Enter number of items"
@@ -459,7 +467,7 @@ RMANote() {
 
 PrepOutbound() {
     POPrompt := "Enter the PO to work on:"
-    InputBox, POnum, Enter POnum, %POPrompt%
+    InputBox, POnum, Enter POnum, %POPrompt%, , , , , , , ,%POnum%
     if ErrorLevel
         return
 
@@ -475,19 +483,21 @@ PrepOutbound() {
 
     if (Same = "n") {
         PartPrompt := "Enter the part to be received. Enter 'Multi' if multiple parts:"
-        InputBox, PartNo, Enter PartNo, %PartPrompt%
+        InputBox, PartNo, Enter PartNo, %PartPrompt%, , , , , , , ,%PartNo%
         if ErrorLevel
             return
 
         ReceivePrompt := "Enter the receiving party:"
-        InputBox, Receiver, Enter Receiver, %ReceivePrompt%
+        InputBox, Receiver, Enter Receiver, %ReceivePrompt%, , , , , , , ,%Receiver%
         if ErrorLevel
             return
     }
     
     Send {Ctrl Down}{Shift Down}d{Shift Up}{Ctrl Up}
     Sleep, 1800
-    PrintDoc()
+    if (printFlag) {
+        PrintDoc()
+    }
     Sleep, 300
     Send {Enter}
     Sleep, 500
