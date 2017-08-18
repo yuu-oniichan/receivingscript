@@ -593,13 +593,13 @@ PrepOutbound() {
     Send {Ctrl Down}{Shift Down}f{Shift Up}{Ctrl Up}
     Sleep, 4000
     UploadButton()
-    Sleep, 2000
+    Sleep, 2400
     Send {Alt Down}d{Alt Up}
-    Sleep, 50
+    Sleep, 100
     Send P:\Warehouse\Jason backup\Migration\Inventory Upload
-    Sleep, 50
+    Sleep, 60
     Send {Enter}
-    Sleep, 50
+    Sleep, 200
     Send {Alt Down}n{Alt Up}
     Sleep, 300
     Send "%POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%" "%POnum%-serials-%Receiver%-%Qual%pcs-%PartNo%"
