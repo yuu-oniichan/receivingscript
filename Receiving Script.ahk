@@ -185,28 +185,67 @@ SetTimeCompSave() {
     Send ^s
 }
 
-; Transfers from list of cells in Excel to ACCTIVATE
-CellTransfer(loopCount) {
+; Transfers from list of cells in Excel to ACCTIVATE; spec is 0 or 1
+CellTransfer(loopCount, spec) {
 
-    loop, %loopCount% {
-        Send {Ctrl Down}c{Ctrl Up}
-        Sleep, 50
-        Send {Down}
-        Sleep, 40
+    if spec
+        loop, %loopCount% {
+            Send {Ctrl Down}c{Ctrl Up}
+            Sleep, 40
+            Send {Right}
+            Sleep, 40
 
-        Send {Alt Down}{Tab}{Alt Up}
-        Sleep, 80
+            Send {Alt Down}{Tab}{Alt Up}
+            Sleep, 80
 
-        Send {Ctrl Down}v{Ctrl Up}
-        Sleep, 50
-        Send {Backspace}
-        Sleep, 40
-        Send {Down}
-        Sleep, 40
+            Send {Ctrl Down}v{Ctrl Up}
+            Sleep, 50
+            Send {Backspace}
+            Sleep, 40
+            Send {Right}{Right}
+            Sleep, 40
 
-        Send {Alt Down}{Tab}{Alt Up}
-        Sleep, 80
-    }
+            Send {Alt Down}{Tab}{Alt Up}
+            Sleep, 80
+
+            Send {Ctrl Down}c{Ctrl Up}
+            Sleep, 40
+            Send {Down}{Left}
+            Sleep, 40
+
+            Send {Alt Down}{Tab}{Alt Up}
+            Sleep, 80
+
+            Send {Ctrl Down}v{Ctrl Up}
+            Sleep, 50
+            Send {Backspace}
+            Sleep, 40
+            Send {Right}{Left}{Left}{Left}{Down}
+            Sleep, 40
+
+            Send {Alt Down}{Tab}{Alt Up}
+            Sleep, 80
+        }
+    else 
+        loop, %loopCount% {
+            Send {Ctrl Down}c{Ctrl Up}
+            Sleep, 50
+            Send {Down}
+            Sleep, 40
+
+            Send {Alt Down}{Tab}{Alt Up}
+            Sleep, 80
+
+            Send {Ctrl Down}v{Ctrl Up}
+            Sleep, 50
+            Send {Backspace}
+            Sleep, 40
+            Send {Down}
+            Sleep, 40
+
+            Send {Alt Down}{Tab}{Alt Up}
+            Sleep, 80
+        }
     
     return
 }
@@ -287,7 +326,12 @@ CellTransfer(loopCount) {
     if ErrorLevel
         return
 
-    CellTransfer(Qual)
+    specPrompt := "Spec field? 1 for yes"
+    InputBox, spec, Enter spec, %SpecPrompt%, , , , , , , ,1
+    if ErrorLevel
+        return
+
+    CellTransfer(Qual, spec)
     return
 
 
