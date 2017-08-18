@@ -113,10 +113,10 @@ CloseReportWin() {
 
     MouseGetPos, OrderBoxX, OrderBoxY
 
-    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\closereportwin.bmp
+    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\closereportwin2.bmp
     if (ErrorLevel=0)
     {
-        FoundX+=100
+        FoundX+=60
         ;MsgBox Image Found
         ;Sleep, 500
         Click %FoundX%, %FoundY%
@@ -495,7 +495,7 @@ PrepOutbound() {
             return
     }
 
-    Quantity = Qual
+    Quantity = %Qual%
 
     WinWaitActive, Trio SCS - Acctivate
     
