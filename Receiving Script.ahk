@@ -19,6 +19,10 @@ Global Receiver = "tsli"
 Global PartNo = "00Z000"
 Global ShipCompany = "UPS Freight"
 Global Tracking = "000000"
+Global oType = ""
+
+Global spec = 1
+Global Tested = 0
 
 ;Function: saves the current mouse position; not used
 SaveMousePos() {
@@ -159,7 +163,12 @@ UploadButton() {
 ;Sends Pick and Pull Note to Anne
 PickAndPull(Qual, POType) {
     NewNote()
-    Send Picked and Pulled, Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
+    if (Tested) {
+        Send Picked and Pulled, FC tested. Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
+    }
+    else {
+        Send Picked and Pulled, Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
+    }
     if (POType = "S")
         Send {Tab}{Tab}{Tab}a{Down}{Tab}
     else if (POType = "R")
@@ -327,7 +336,7 @@ CellTransfer(loopCount, spec) {
         return
 
     specPrompt := "Spec field? 1 for yes"
-    InputBox, spec, Enter spec, %SpecPrompt%, , , , , , , ,1
+    InputBox, spec, Enter spec, %SpecPrompt%, , , , , , , ,%spec%
     if ErrorLevel
         return
 
@@ -428,6 +437,13 @@ AutoShip() {
     MsgBox Print Flag set at %printFlag%
     return
 
+    ^!4::
+    if Tested
+        Tested = 0
+    else Tested = 1
+    MsgBox Tested flag set at %Tested%
+    return
+
 ;Creates a Tracking Note
 TrackingNote() {
     QtyPrompt := "Enter number of items"
@@ -436,7 +452,7 @@ TrackingNote() {
         return
 
     TypePrompt := "Sales order = S, TRO = R"
-    InputBox, oType, Enter oType, %TypePrompt%
+    InputBox, oType, Enter oType, %TypePrompt%, , , , , , , ,%oType%
     if ErrorLevel
         return
 
@@ -544,27 +560,28 @@ PrepOutbound() {
     WinWaitActive, Trio SCS - Acctivate
     
     Send {Ctrl Down}{Shift Down}d{Shift Up}{Ctrl Up}
-    Sleep, 1800
+    Sleep, 2400
     if (printFlag) {
         PrintDoc()
+        Sleep, 500
     }
-    Sleep, 300
+    Sleep, 400
     Send {Enter}
     Sleep, 500
     ExportDoc()
-    Sleep, 150
+    Sleep, 600
     Send {Enter}
-    Sleep, 50
+    Sleep, 400
     Send {Enter}
-    Sleep, 300
+    Sleep, 500
     Send %POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%
-    Sleep, 120
+    Sleep, 250
     Send {Alt Down}d{Alt Up}
-    Sleep, 50
+    Sleep, 200
     Send P:\Warehouse\Jason backup\Migration\Inventory Upload
-    Sleep, 50
+    Sleep, 200
     Send {Enter}
-    Sleep, 150
+    Sleep, 250
     Send {Alt Down}s{Alt Up}
     Sleep, 200
     CloseReportWin()
@@ -591,19 +608,19 @@ PrepOutbound() {
     CloseReportWin()
 
     Send {Ctrl Down}{Shift Down}f{Shift Up}{Ctrl Up}
-    Sleep, 4000
+    Sleep, 8000
     UploadButton()
-    Sleep, 2400
+    Sleep, 3000
     Send {Alt Down}d{Alt Up}
-    Sleep, 100
-    Send P:\Warehouse\Jason backup\Migration\Inventory Upload
-    Sleep, 60
-    Send {Enter}
     Sleep, 200
-    Send {Alt Down}n{Alt Up}
+    Send P:\Warehouse\Jason backup\Migration\Inventory Upload
+    Sleep, 200
+    Send {Enter}
     Sleep, 300
+    Send {Alt Down}n{Alt Up}
+    Sleep, 400
     Send "%POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%" "%POnum%-serials-%Receiver%-%Qual%pcs-%PartNo%"
-    Sleep, 150
+    Sleep, 200
     Send {Alt Down}o{Alt Up}
     Sleep, 300
     Send {Enter}
@@ -648,6 +665,7 @@ ObaDump() {
         1: set completion flag
         2: set date of entry
         3: toggle printing
+        4: toggle Tested flag
     ), ,Receiving Help
     return    
 /*
