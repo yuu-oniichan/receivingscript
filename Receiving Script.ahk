@@ -164,7 +164,7 @@ UploadButton() {
 PickAndPull(Qual, POType) {
     NewNote()
     if (Tested) {
-        Send Picked and Pulled, FC tested. Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
+        Send Picked and Pulled, IBM tested. Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
     }
     else {
         Send Picked and Pulled, Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
@@ -666,7 +666,8 @@ ObaDump() {
         2: set date of entry
         3: toggle printing
         4: toggle Tested flag
-    ), ,Receiving Help
+    )
+    ;, ,Receiving Help
     return    
 /*
     ImageSearch, FoX, FoY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\sales_order_button.png
