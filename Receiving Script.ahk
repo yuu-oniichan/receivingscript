@@ -569,11 +569,11 @@ PrepOutbound() {
     Send {Enter}
     Sleep, 500
     ExportDoc()
-    Sleep, 600
+    Sleep, 1000
     Send {Enter}
-    Sleep, 400
+    Sleep, 1000
     Send {Enter}
-    Sleep, 500
+    Sleep, 2000
     Send %POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%
     Sleep, 250
     Send {Alt Down}d{Alt Up}
@@ -608,7 +608,7 @@ PrepOutbound() {
     CloseReportWin()
 
     Send {Ctrl Down}{Shift Down}f{Shift Up}{Ctrl Up}
-    Sleep, 8000
+    Sleep, 4000
     UploadButton()
     Sleep, 3000
     Send {Alt Down}d{Alt Up}
