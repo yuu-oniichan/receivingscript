@@ -205,25 +205,29 @@ CellTransfer(loopCount, spec) {
             Sleep, 40
 
             Send {Alt Down}{Tab}{Alt Up}
-            Sleep, 80
+            Sleep, 100
 
             Send {Ctrl Down}v{Ctrl Up}
             Sleep, 50
             Send {Backspace}
             Sleep, 40
-            Send {Right}{Right}
+            Send {Right}
+            Sleep, 40
+            Send {Right}
             Sleep, 40
 
             Send {Alt Down}{Tab}{Alt Up}
-            Sleep, 80
+            Sleep, 100
 
             Send {Ctrl Down}c{Ctrl Up}
             Sleep, 40
-            Send {Down}{Left}
+            Send {Down}
+            Sleep, 40
+            Send {Left}
             Sleep, 40
 
             Send {Alt Down}{Tab}{Alt Up}
-            Sleep, 80
+            Sleep, 100
 
             Send {Ctrl Down}v{Ctrl Up}
             Sleep, 50
@@ -233,7 +237,7 @@ CellTransfer(loopCount, spec) {
             Sleep, 40
 
             Send {Alt Down}{Tab}{Alt Up}
-            Sleep, 80
+            Sleep, 100
         }
     else 
         loop, %loopCount% {
@@ -405,8 +409,48 @@ AutoShip() {
     }
 }
 
+AutoCopy() {
+    WinGetTitle, currentExcel
+    Xl := ComObjActive("Excel.Application") ;creates a handle to your currently active excel sheet
+
+    /*
+    QtyPrompt := "Enter number of Orders to process"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    if ErrorLevel
+        return
+    */
+
+    WinActivate, Trio SCS - Acctivate
+
+    ;MouseGetPos, OBoxX, OBoxY
+
+    Xl := ComObjActive("Excel.Application")
+    arrPO := ParseXlCol(Xl, "A")
+    arrVar := ParseXlCol(Xl, "B")
+
+    WinActivate, Trio SCS - Acctivate
+
+    Loop, % arrPO.MaxIndex() {
+        ;Click OBoxX, OBoxY
+        ;Send {Home}
+        ;Send +{End}
+        Send, % arrPO[A_Index]
+        Sleep, 40
+        Send {Right}{Right}
+        Sleep, 40
+        Send, % arrVar[A_Index]
+        Sleep, 40
+        Send {Right}{Left}{Left}{Left}{Down}
+        Sleep, 40
+    }
+}
+
     ^!d::
     AutoShip()
+    return
+
+    ^!u::
+    AutoCopy()
     return
 
     ^!1::
@@ -560,7 +604,7 @@ PrepOutbound() {
     WinWaitActive, Trio SCS - Acctivate
     
     Send {Ctrl Down}{Shift Down}d{Shift Up}{Ctrl Up}
-    Sleep, 2400
+    Sleep, 2000
     if (printFlag) {
         PrintDoc()
         Sleep, 500
@@ -569,15 +613,15 @@ PrepOutbound() {
     Send {Enter}
     Sleep, 500
     ExportDoc()
-    Sleep, 1000
+    Sleep, 500
     Send {Enter}
-    Sleep, 1000
+    Sleep, 500
     Send {Enter}
-    Sleep, 2000
+    Sleep, 3000
     Send %POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%
-    Sleep, 250
+    Sleep, 500
     Send {Alt Down}d{Alt Up}
-    Sleep, 200
+    Sleep, 500
     Send P:\Warehouse\Jason backup\Migration\Inventory Upload
     Sleep, 200
     Send {Enter}
@@ -594,7 +638,7 @@ PrepOutbound() {
     Send {Enter}
     Sleep, 50
     Send {Enter}
-    Sleep, 300
+    Sleep, 1000
     Send %POnum%-serials-%Receiver%-%Qual%pcs-%PartNo%
     Sleep, 120
     Send {Alt Down}d{Alt Up}
@@ -661,6 +705,7 @@ ObaDump() {
         f: RMA note to Julio
         g: Prep outbound 
         h: help
+        u: AutoCopy
 
         1: set completion flag
         2: set date of entry
