@@ -613,9 +613,9 @@ PrepOutbound() {
     Send {Enter}
     Sleep, 500
     ExportDoc()
-    Sleep, 500
+    Sleep, 600
     Send {Enter}
-    Sleep, 500
+    Sleep, 800
     Send {Enter}
     Sleep, 3000
     Send %POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%
