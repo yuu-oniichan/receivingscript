@@ -26,7 +26,6 @@ Global Tested = 0
 
 ;Function: saves the current mouse position; not used
 SaveMousePos() {
-    WinActivate, Trio SCS - Acctivate
     MouseGetPos, OrderBoxX, OrderBoxY
 }
 
@@ -689,6 +688,38 @@ ObaDump() {
     ObaDump()
     return
 
+VPDCheck() {
+    SaveMousePos()
+
+    Send {Alt Down}d{Alt Up}
+    Sleep, 100
+    Send c{Right}
+    Sleep, 50
+    Send i
+    VPDPrompt := "Incorrect VPD? enter y to exit."
+    InputBox, Vcheck, Enter Vcheck, %VPDPrompt%
+    if ErrorLevel
+        return
+    if (Vcheck = "y") {
+        return
+    }
+    Send {Space}
+    Sleep, 50
+    Click %OrderBoxX%, %OrderBoxY%
+    Sleep, 100
+    Send {Down}
+    Sleep, 50
+    VPDCheck()
+}
+
+    ^!m::
+    VPDCheck()
+    return
+
+    ^!5::
+    Send Maro2268123!{Enter}
+    return
+
     ^!h::
     MsgBox,
     (
@@ -706,11 +737,13 @@ ObaDump() {
         g: Prep outbound 
         h: help
         u: AutoCopy
+        m: VPD check
 
         1: set completion flag
         2: set date of entry
         3: toggle printing
         4: toggle Tested flag
+        5: SV password
     )
     ;, ,Receiving Help
     return    
