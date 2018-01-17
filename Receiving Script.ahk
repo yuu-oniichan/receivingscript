@@ -171,7 +171,7 @@ PickAndPull(Qual, POType) {
     if (POType = "S")
         Send {Tab}{Tab}{Tab}a{Down}{Tab}
     else if (POType = "R")
-        Send {Tab}{Tab}{Tab}j{Tab}
+        Send {Tab}{Tab}{Tab}j{Down}{Tab}
     else {
         MsgBox PickandPull Incorrect Input Error
         return
@@ -523,7 +523,7 @@ TrackingNote() {
     if (oType = "S")
         Send {Tab}{Tab}{Tab}a{Down}{Tab}
     else if (oType = "R")
-        Send {Tab}{Tab}{Tab}j{Tab}
+        Send {Tab}{Tab}{Tab}j{Down}{Tab}
     else {
         MsgBox Tracking Incorrect Input Error
         return
@@ -562,7 +562,7 @@ RMANote() {
 
     NewNote()
     Send %Qual% Pcs Rejected, Please RMA with Vendor
-    Send {Tab}{Tab}{Tab}j{Tab}
+    Send {Tab}{Tab}{Tab}j{Down}{Tab}
     SetTimeCompSave()
 }
 
@@ -694,7 +694,7 @@ VPDCheck() {
     Send {Alt Down}d{Alt Up}
     Sleep, 100
     Send c{Right}
-    Sleep, 50
+    Sleep, 100
     Send i
     VPDPrompt := "Incorrect VPD? enter y to exit."
     InputBox, Vcheck, Enter Vcheck, %VPDPrompt%
@@ -704,11 +704,11 @@ VPDCheck() {
         return
     }
     Send {Space}
-    Sleep, 50
+    Sleep, 100
     Click %OrderBoxX%, %OrderBoxY%
     Sleep, 100
     Send {Down}
-    Sleep, 50
+    Sleep, 100
     VPDCheck()
 }
 
@@ -717,7 +717,7 @@ VPDCheck() {
     return
 
     ^!5::
-    Send Maro2268123!{Enter}
+    Send Maro2268123{!}{Enter}
     return
 
     ^!h::
