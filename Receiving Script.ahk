@@ -689,8 +689,7 @@ ObaDump() {
     return
 
 VPDCheck() {
-    SaveMousePos()
-
+    Sleep, 25
     Send {Alt Down}d{Alt Up}
     Sleep, 100
     Send c{Right}
@@ -705,7 +704,7 @@ VPDCheck() {
     }
     Send {Space}
     Sleep, 100
-    Click %OrderBoxX%, %OrderBoxY%
+    Send {tab}{tab}
     Sleep, 100
     Send {Down}
     Sleep, 100
