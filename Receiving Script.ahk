@@ -711,8 +711,61 @@ VPDCheck() {
     VPDCheck()
 }
 
+CPTransfer(loopCount) {
+    loop, %loopCount% {
+            Send {Ctrl Down}c{Ctrl Up}
+            Sleep, 40
+            Send {Right}
+            Sleep, 40
+
+            Send {Alt Down}{Tab}{Alt Up}
+            Sleep, 100
+
+            Send {Ctrl Down}v{Ctrl Up}
+            Sleep, 50
+            Send {Backspace}
+            Sleep, 40
+            Send {Right}
+            Sleep, 1000
+            Send {Left}
+            Sleep, 60
+
+            Send {Alt Down}{Tab}{Alt Up}
+            Sleep, 100
+
+            Send {Ctrl Down}c{Ctrl Up}
+            Sleep, 40
+            Send {Down}
+            Sleep, 40
+            Send {Left}
+            Sleep, 40
+
+            Send {Alt Down}{Tab}{Alt Up}
+            Sleep, 100
+
+            Send {Ctrl Down}v{Ctrl Up}
+            Sleep, 50
+            Send {Backspace}
+            Sleep, 40
+            Send {Down}{Left}
+            Sleep, 40
+
+            Send {Alt Down}{Tab}{Alt Up}
+            Sleep, 100
+        }
+}
+
     ^!m::
     VPDCheck()
+    return
+
+    ^!p::
+    QtyPrompt := "Enter number of items"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    if ErrorLevel
+        return
+
+    CPTransfer(Qual)
     return
 
     ^!5::
