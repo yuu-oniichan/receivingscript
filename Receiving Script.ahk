@@ -724,9 +724,9 @@ CPTransfer(loopCount) {
             Send {Ctrl Down}v{Ctrl Up}
             Sleep, 50
             Send {Backspace}
-            Sleep, 40
+            Sleep, 50
             Send {Right}
-            Sleep, 1000
+            Sleep, 1400
             Send {Left}
             Sleep, 60
 
@@ -734,24 +734,24 @@ CPTransfer(loopCount) {
             Sleep, 100
 
             Send {Ctrl Down}c{Ctrl Up}
-            Sleep, 40
+            Sleep, 60
             Send {Down}
-            Sleep, 40
+            Sleep, 60
             Send {Left}
-            Sleep, 40
+            Sleep, 60
 
             Send {Alt Down}{Tab}{Alt Up}
-            Sleep, 100
+            Sleep, 120
 
             Send {Ctrl Down}v{Ctrl Up}
-            Sleep, 50
+            Sleep, 60
             Send {Backspace}
-            Sleep, 40
+            Sleep, 60
             Send {Down}{Left}
-            Sleep, 40
+            Sleep, 60
 
             Send {Alt Down}{Tab}{Alt Up}
-            Sleep, 100
+            Sleep, 120
         }
 }
 
