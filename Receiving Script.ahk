@@ -426,8 +426,14 @@ AutoCopy() {
     Xl := ComObjActive("Excel.Application")
     arrPO := ParseXlCol(Xl, "A")
     arrVar := ParseXlCol(Xl, "B")
+    arrNote := ParseXlCol(Xl, "C")
 
     WinActivate, Trio SCS - Acctivate
+
+    modePrompt := "Enter 1 for Notes Column"
+    InputBox, copyMode, Enter AutoCopy, %modePrompt%, , , , , , , ,0
+    if ErrorLevel
+        return
 
     Loop, % arrPO.MaxIndex() {
         ;Click OBoxX, OBoxY
@@ -439,7 +445,16 @@ AutoCopy() {
         Sleep, 40
         Send, % arrVar[A_Index]
         Sleep, 40
-        Send {Right}{Left}{Left}{Left}{Down}
+        If (copyMode = 1) {
+            Send {Right}
+            Sleep, 40
+            Send, % arrNote[A_Index]
+            Sleep, 40
+            Send {Down}{Left}{Left}{Left}
+        }
+        Else {
+            Send {Down}{Left}{Left}
+        }
         Sleep, 40
     }
 }
