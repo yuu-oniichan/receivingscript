@@ -806,6 +806,7 @@ CPTransfer(loopCount) {
         h: help
         u: AutoCopy
         m: VPD check
+        p: Populate Transfer (experimental)
 
         1: set completion flag
         2: set date of entry
