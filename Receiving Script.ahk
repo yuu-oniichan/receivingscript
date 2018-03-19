@@ -43,7 +43,7 @@ NewNote()
 
     MouseGetPos, OrderBoxX, OrderBoxY
 
-    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\newbutt.bmp
+    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Receivers\Jason\Migration\AutoIT\newbutt.bmp
     if (ErrorLevel=0)
     {
         ;MsgBox Image Found
@@ -68,7 +68,7 @@ ExportDoc() {
 
     MouseGetPos, OrderBoxX, OrderBoxY
 
-    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\exportbutton2.bmp
+    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Receivers\Jason\Migration\AutoIT\exportbutton2.bmp
     if (ErrorLevel=0)
     {
         ;MsgBox Image Found
@@ -92,7 +92,7 @@ PrintDoc() {
 
     MouseGetPos, OrderBoxX, OrderBoxY
 
-    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\printbutton.bmp
+    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Receivers\Jason\Migration\AutoIT\printbutton.bmp
     if (ErrorLevel=0)
     {
         ;MsgBox Image Found
@@ -116,7 +116,7 @@ CloseReportWin() {
 
     MouseGetPos, OrderBoxX, OrderBoxY
 
-    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\closereportwin2.bmp
+    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Receivers\Jason\Migration\AutoIT\closereportwin2.bmp
     if (ErrorLevel=0)
     {
         FoundX+=60
@@ -140,7 +140,7 @@ CloseReportWin() {
 UploadButton() {
     MouseGetPos, OrderBoxX, OrderBoxY
 
-    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\smartvault.bmp
+    ImageSearch, FoundX, FoundY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Receivers\Jason\Migration\AutoIT\smartvault.bmp
     if (ErrorLevel=0)
     {
         ;MsgBox Image Found
@@ -636,7 +636,7 @@ PrepOutbound() {
     Sleep, 500
     Send {Alt Down}d{Alt Up}
     Sleep, 500
-    Send P:\Warehouse\Jason backup\Migration\Inventory Upload
+    Send P:\Warehouse\Receivers\Jason\Migration\Inventory Upload
     Sleep, 200
     Send {Enter}
     Sleep, 250
@@ -657,7 +657,7 @@ PrepOutbound() {
     Sleep, 120
     Send {Alt Down}d{Alt Up}
     Sleep, 50
-    Send P:\Warehouse\Jason backup\Migration\Inventory Upload
+    Send P:\Warehouse\Receivers\Jason\Migration\Inventory Upload
     Sleep, 50
     Send {Enter}
     Sleep, 150
@@ -671,7 +671,7 @@ PrepOutbound() {
     Sleep, 3000
     Send {Alt Down}d{Alt Up}
     Sleep, 200
-    Send P:\Warehouse\Jason backup\Migration\Inventory Upload
+    Send P:\Warehouse\Receivers\Jason\Migration\Inventory Upload
     Sleep, 200
     Send {Enter}
     Sleep, 300
@@ -697,7 +697,7 @@ ObaDump() {
 
     ^!g::
     IfWinNotExist, rawdump - Excel
-        RunWait, excel.exe "P:\Warehouse\Jason backup\Migration\rawdump.xlsx"
+        RunWait, excel.exe "P:\Warehouse\Receivers\Jason\Migration\rawdump.xlsx"
         WinActivate, Trio SCS - Acctivate
     PrepOutbound()
     ObaDump()
@@ -817,12 +817,12 @@ CPTransfer(loopCount) {
     ;, ,Receiving Help
     return    
 /*
-    ImageSearch, FoX, FoY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Jason backup\Migration\AutoIT\sales_order_button.png
+    ImageSearch, FoX, FoY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *100 P:\Warehouse\Receivers\Jason\Migration\AutoIT\sales_order_button.png
     if(ErrorLevel=0)
         {
         Click %FoX%, %FoY%
         Sleep, 500
-        ImageSearch, FovX, FovY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *70 P:\Warehouse\Jason backup\Migration\AutoIT\order_num.png
+        ImageSearch, FovX, FovY, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, *70 P:\Warehouse\Receivers\Jason\Migration\AutoIT\order_num.png
         if (ErrorLevel=0) {
             MsgBox Searching...
             Sleep, 500
