@@ -159,7 +159,7 @@ UploadButton() {
 }
 
 
-;Sends Pick and Pull Note to Anne
+;Sends Pick and Pull Note to Jaci
 PickAndPull(Qual, POType) {
     NewNote()
     if (Tested) {
@@ -169,7 +169,7 @@ PickAndPull(Qual, POType) {
         Send Picked and Pulled, Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
     }
     if (POType = "S")
-        Send {Tab}{Tab}{Tab}a{Down}{Tab}
+        Send {Tab}{Tab}{Tab}j{Down}{Down}{Tab}
     else if (POType = "R")
         Send {Tab}{Tab}{Tab}j{Down}{Tab}
     else {
@@ -267,7 +267,7 @@ CellTransfer(loopCount, spec) {
     NewNote()
     return
 
-;Creates a PO receiving note to both buyer and prompts for note to Anne
+;Creates a PO receiving note to both buyer and prompts for note to Jaci
 ;Do not break order, no return statement to flow into ^!q command
     ^!w::
     qtyPrompt := "Enter a whole number. Do not use this to enter exceptions."
@@ -280,7 +280,7 @@ CellTransfer(loopCount, spec) {
     if ErrorLevel
         return
 
-    InputBox, noteAnne, Complete PO?, y or n
+    InputBox, noteJaci, Complete PO?, y or n
     if ErrorLevel
         return
 
@@ -288,15 +288,15 @@ CellTransfer(loopCount, spec) {
     Send %qty% Received, %qty% Accepted.
     Send {Tab}{Tab}{Tab}%buyer%{Tab}
     SetTimeCompSave()
-    ifNotEqual noteAnne, y
+    ifNotEqual noteJaci, y
         return
     sleep, 300
 
-;Only sets PO note to Anne
+;Only sets PO note to Jaci
     ^!q::
     NewNote()
     Send All Parts Recieved, PO Ready For Completion.
-    Send {Tab}{Tab}{Tab}a{Down}{Tab}
+    Send {Tab}{Tab}{Tab}j{Down}{Down}{Tab}
     SetTimeCompSave()
     return    
 
@@ -536,7 +536,7 @@ TrackingNote() {
     Send %Qual% Pcs Shipped VIA %ShipCompany% `n
     Send %Tracking%
     if (oType = "S")
-        Send {Tab}{Tab}{Tab}a{Down}{Tab}
+        Send {Tab}{Tab}{Tab}j{Down}{Down}{Tab}
     else if (oType = "R")
         Send {Tab}{Tab}{Tab}j{Down}{Tab}
     else {
@@ -793,10 +793,10 @@ CPTransfer(loopCount) {
     (
         Available Commands (all are togged by Ctrl+Alt+<key>):
         a: new note
-        w: PO parts received note to buyer and Anne (opt.)
-        q: All parts received to Anne
+        w: PO parts received note to buyer and Jaci (opt.)
+        q: All parts received to Jaci
         e: Product Arrived note to buyer
-        s: Shipped and invoice note to Anne/Julio
+        s: Shipped and invoice note to Jaci/Julio
         c: Copy-Paste from Excel
         d: auto-ship notes from excel (see doc.)
         t: tracking note
