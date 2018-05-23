@@ -23,6 +23,7 @@ Global oType = ""
 
 Global spec = 1
 Global Tested = 0
+Global oType = S
 
 ;Function: saves the current mouse position; not used
 SaveMousePos() {
@@ -163,7 +164,9 @@ UploadButton() {
 PickAndPull(Qual, POType) {
     NewNote()
     if (Tested) {
-        Send Picked and Pulled, IBM tested. Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
+        Send Picked and Pulled. Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
+        Send {Enter}{Enter}
+        Send Parts tested to IBM SPEC, hold for shipment
     }
     else {
         Send Picked and Pulled, Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
@@ -324,7 +327,7 @@ CellTransfer(loopCount, spec) {
         return
 
     TypePrompt := "Sales order = S, TRO = R"
-    InputBox, oType, Enter oType, %TypePrompt%
+    InputBox, oType, Enter oType, %TypePrompt%, , , , , , , ,%oType%
     if ErrorLevel
         return
 
