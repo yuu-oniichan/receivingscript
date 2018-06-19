@@ -172,7 +172,7 @@ PickAndPull(Qual, POType) {
         Send Picked and Pulled, Shipping %Qual% Pcs. Please Invoice and Send Confirmation Note.
     }
     if (POType = "S")
-        Send {Tab}{Tab}{Tab}j{Down}{Down}{Tab}
+        Send {Tab}{Tab}{Tab}j{Down}{Down}{Down}{Tab}
     else if (POType = "R")
         Send {Tab}{Tab}{Tab}j{Down}{Tab}
     else {
@@ -299,7 +299,7 @@ CellTransfer(loopCount, spec) {
     ^!q::
     NewNote()
     Send All Parts Recieved, PO Ready For Completion.
-    Send {Tab}{Tab}{Tab}j{Down}{Down}{Tab}
+    Send {Tab}{Tab}{Tab}j{Down}{Down}{Down}{Tab}
     SetTimeCompSave()
     return    
 
@@ -561,7 +561,7 @@ TrackingNote() {
     Send %Qual% Pcs Shipped VIA %ShipCompany% `n
     Send %Tracking%
     if (oType = "S")
-        Send {Tab}{Tab}{Tab}j{Down}{Down}{Tab}
+        Send {Tab}{Tab}{Tab}j{Down}{Down}{Down}{Tab}
     else if (oType = "R")
         Send {Tab}{Tab}{Tab}j{Down}{Tab}
     else {
