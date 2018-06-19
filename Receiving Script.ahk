@@ -244,22 +244,22 @@ CellTransfer(loopCount, spec) {
     else 
         loop, %loopCount% {
             Send {Ctrl Down}c{Ctrl Up}
-            Sleep, 50
+            Sleep, 100
             Send {Down}
-            Sleep, 40
+            Sleep, 80
 
             Send {Alt Down}{Tab}{Alt Up}
-            Sleep, 80
+            Sleep, 160
 
             Send {Ctrl Down}v{Ctrl Up}
-            Sleep, 50
+            Sleep, 100
             Send {Backspace}
-            Sleep, 40
+            Sleep, 80
             Send {Down}
-            Sleep, 40
+            Sleep, 80
 
             Send {Alt Down}{Tab}{Alt Up}
-            Sleep, 80
+            Sleep, 160
         }
     
     return
