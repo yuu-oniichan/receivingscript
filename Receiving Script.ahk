@@ -373,6 +373,28 @@ ParseXlCol(Xl, col) {
     return arr
 }
 
+ParseXLenCol(Xl, col, length) {
+    /*Send {Ctrl Down}c{Ctrl Up}
+    Sleep, 20
+    StringReplace, clipboard, clipboard, `r`n, ,All
+    value = %clipboard%
+    return value
+    */
+    ;return Xl.Range("A1").Value
+    arr := object()
+    ;A_Index = 0
+
+    Loop, %length% {
+        if (Xl.Range(col . A_Index).Value = "") {
+            arr[A_Index] := ""
+        }
+        else {
+            arr[A_Index] := Xl.Range(col . A_Index).Value
+        }
+    }
+    return arr
+}
+
 ;incomplete for shipping notes entry
 
 AutoShip() {
@@ -429,7 +451,7 @@ AutoCopy() {
     Xl := ComObjActive("Excel.Application")
     arrPO := ParseXlCol(Xl, "A")
     arrVar := ParseXlCol(Xl, "B")
-    arrNote := ParseXlCol(Xl, "C")
+    arrNote := ParseXLenCol(Xl, "C", arrPO.MaxIndex())
 
     WinActivate, Trio SCS - Acctivate
 
@@ -680,8 +702,8 @@ PrepOutbound() {
     Sleep, 300
     Send {Alt Down}n{Alt Up}
     Sleep, 400
-    Send "%POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%" "%POnum%-serials-%Receiver%-%Qual%pcs-%PartNo%"
-    Sleep, 200
+    Send "%POnum%-packslip-%Receiver%-%Qual%pcs-%PartNo%.pdf" "%POnum%-serials-%Receiver%-%Qual%pcs-%PartNo%.pdf"
+    Sleep, 400
     Send {Alt Down}o{Alt Up}
     Sleep, 300
     Send {Enter}
@@ -774,8 +796,26 @@ CPTransfer(loopCount) {
         }
 }
 
+    ClearSalesOrder(loopCount) {
+        loop, %loopCount% {
+            Click
+            Sleep, 50
+            Send {Delete}
+            Sleep, 50
+        }
+    }
+
     ^!m::
     VPDCheck()
+    return
+
+    ^!j::
+    QtyPrompt := "Enter number of parts to clear"
+    InputBox, Qual, Enter Qual, %QtyPrompt%
+    if ErrorLevel
+        return
+    ClearSalesOrder(Qual)
+
     return
 
     ^!p::
@@ -810,6 +850,7 @@ CPTransfer(loopCount) {
         u: AutoCopy
         m: VPD check
         p: Populate Transfer (experimental)
+        j: clear sales order
 
         1: set completion flag
         2: set date of entry
